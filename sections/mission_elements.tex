@@ -92,8 +92,87 @@ elements}\label{description-of-system-elements}
 
 TBD
 
+\newpage
+\thispagestyle{noheader}
+\newgeometry{
+    headheight=0pt,
+    headsep=0pt,
+    bottom=2cm,
+    left=2.5cm,
+    right=2.5cm,
+    top=2cm
+}
+
+\begin{landscape}
 \subsection{Product Breakdown Structure
 (PBS)}\label{pbs}
+
+\resizebox{\linewidth}{!}{%
+\begin{forest}
+for tree={
+    draw,
+    rounded corners,
+    % edge={->},
+    font=\sffamily,
+    grow'=south,
+    % minimum height=1.2em,
+    % text width=3cm,
+    align=left,
+    anchor=north,
+}
+[MARSNET Mission % Level 1
+  [Space Segment % Level 2
+    [Relay Satellites \\(Areostationary) % Level 3
+      [Bus Subsystems % Level 4
+        [Power \\ Thermal \\ ADCS \\ Propulsion \\ OBDH \\ Structure \\ Communications] % Level 5
+      ]
+      % [Bus Subsystems
+      %   [Power]
+      %   [Thermal]
+      %   [ADCS]
+      %   [Propulsion]
+      %   [OBDH]
+      %   [Structure]
+      %   [Communications]
+      % ]
+      [Payload Suite % Level 4
+        [High-Gain \\Antenna System] % Level 5
+        [Optical \\Communication \\Terminal] % Level 5
+        [Inter-satellite \\Crosslink \\Transceiver] % Level 5
+      ]
+    ]
+    [Relay Satellites \\(Polar Orbiters)]
+    [Inter-satellite \\Link System]
+  ]
+  [Ground Segment % Level 2
+    [Earth Ground \\Stations \\(DSN interface)
+    %   [Antenna Systems]
+    %   [Tracking \& \\Telemetry \\Subsystems]
+    %   [Data Processing\\ Subsystems]
+    ]
+    [Mission \\Operations \\Center]
+  ]
+  [Launcher Segment % Level 2
+    [Launch Vehicle(s)
+    %   [Payload \\Fairing]
+    %   [Upper Stage \\Adapter]
+    %   [Guidance \& \\Control \\Subsystems]
+    ]
+    [Integration \\ Facilities]
+  ]
+  [User Segment % Level 2
+    [Mars Surface Assets
+      [Surface Comm \\Modules]
+      [Portable \\Terminals]
+      [Rover/Habitat \\Relay \\Interfaces]
+    ]
+  ]
+]
+\end{forest}}
+\end{landscape}
+
+\restoregeometry
+\newpage
 
 TBD
 
