@@ -90,11 +90,78 @@
   \clearpage
   \subfile{#1}
 }
-
+\newcommand{\dotit}[1]{%
+  \def\temp{}%
+  \foreach \x in {#1}{\x} % <- expand into chars
+}
 \renewcommand*\contentsname{Table of Contents:}
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Define PBS style
+\forestset{
+  pbs/.style={
+    for tree={
+      draw,
+      font=\sffamily,
+      grow'=south,
+      align=left,
+      anchor=north,
+      % new key to store the number path
+      number/.wrap pgfmath arg={#1}{},
+      before typesetting nodes={
+        if n=1
+          { % root
+            set number=1,
+            content/.wrap value={\forestoption{number}\quad ##1}
+          }
+          { % children
+            tempcount/.option=n,
+            set number/.wrap value={\forestoption{parent number}.\the\tempcount},
+            content/.wrap value={\forestoption{number}\quad ##1}
+          }
+      },
+    }
+  }
+  % helper keys
+  number/.estore in=\thisnumber,
+  parent number/.option=number,
+}
+% Define style for numbered nodes
+\forestset{
+  numbered/.style={
+    for tree={
+      edge={-},
+      draw,
+      rounded corners,
+      minimum width=2.2cm,
+      minimum height=0.8cm,
+      inner sep=2pt,
+      align=center,
+      delay={
+        mylabel={\parentlab.\forestoption{n}},
+        mycount=mycount*10+n,
+        content={\mylab\\\dotit{\forestoption{mycount}}\\\hline ##1},
+        for children={
+          mycount=mycount("!u"),
+          % parentlabel={\mylab},
+        },
+      },
+    }
+  },
+  % helper keys
+  mylabel/.store in=\mylab,   % saves any string into \mylab
+  mylabel=,                   % default = empty
+  mylabel/.default={},        % ensures it works without explicit value
+  parentlabel/.store in=\parentlab,   % saves any string into \mylab
+  parentlabel=,                   % default = empty
+  parentlabel/.default={},        % ensures it works without explicit value
+  declare count={mycount}{0},
+  declare count={parentCount}{0},
+  % number/.estore in=\thisnumber,
+  % parent number/.option=number,
+}
 
 % Define header
 \fancyhead[L]{%
