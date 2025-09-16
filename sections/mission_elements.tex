@@ -109,13 +109,14 @@ TBD
 
 \resizebox{\linewidth}{!}{%
 \begin{forest}
-  numbered
-  [MARSNET Mission % Level 1
+  numbered,
+  start label=1,
+  [MARSNET Mission% Level 1
     [Space Segment % Level 2
       [Relay Satellites \\(Areostationary) % Level 3
-        [Bus Subsystems % Level 4
-          [Power \\ Thermal \\ ADCS \\ Propulsion \\ OBDH \\ Structure \\ Communications] % Level 5
-        ]
+        % [Bus Subsystems % Level 4
+        %   [Power \\ Thermal \\ ADCS \\ Propulsion \\ OBDH \\ Structure \\ Communications] % Level 5
+        % ]
         % [Bus Subsystems
         %   [Power]
         %   [Thermal]
@@ -125,11 +126,44 @@ TBD
         %   [Structure]
         %   [Communications]
         % ]
-        [Payload Suite % Level 4
-          [High-Gain \\Antenna System] % Level 5
-          [Optical \\Communication \\Terminal] % Level 5
-          [Inter-satellite \\Crosslink \\Transceiver] % Level 5
-        ]
+        % [Payload Suite % Level 4
+        %   [High-Gain \\Antenna System] % Level 5
+        %   [Optical \\Communication \\Terminal] % Level 5
+        %   [Inter-satellite \\Crosslink \\Transceiver] % Level 5
+        % ]
+        % [Payload Suite % Level 4
+          [High-Gain \\Antenna \\System % Level 5
+            [Ka-band \\Reflector \\Antenna % Level 6
+              [Reflector \\Surface \\Panels]
+              [Support Truss/\\Backstructure]
+              [Surface \\Deployment \\Mechanism]
+            ]
+            [S-band / X-band \\Feed Assembly % Level 6
+              [Feed Horn]
+              [Polarizer / \\Orthomode \\Transducer]
+              [Waveguide \\Assembly]
+              [Low-Noise \\Amplifier]
+              [High-Power \\Amplifier]
+            ]
+            [Gimbal \& Pointing \\Mechanism]
+          ]
+          [Optical \\Communication \\Terminal % Level 5
+            [Laser \\Transmitter \\Unit]
+            [Optical \\Telescope \\Assembly]
+            [Acquisition \& \\Tracking \\Sensor]
+            [Detector / \\Receiver \\Module]
+          ]
+          [Inter-satellite \\Crosslink \\Transceiver % Level 5
+            [Crosslink \\RF Antenna]
+            [Crosslink \\Transceiver \\Electronics]
+            [Pointing \& Control \\Interface]
+          ]
+          % [Timing / Navigation Payload (optional) % Level 5
+          %   [Atomic Clock Unit]
+          %   [Frequency Reference Oscillator]
+          %   [Timing Distribution Electronics]
+          % ]
+        % ]
       ]
       [Relay Satellites \\(Polar Orbiters)]
       [Inter-satellite \\Link System]

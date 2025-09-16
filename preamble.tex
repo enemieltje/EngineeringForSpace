@@ -94,45 +94,6 @@
 
 \usepackage{xstring}
 
-\newcommand{\dottednumber}[1]{%
-  \StrLen{#1}[\mylen]%
-  \StrChar{#1}{1}[\mychar]%
-  \mychar
-  \ifnum\mylen>1
-    \foreach \i in {2,...,\mylen}{%
-      .\StrChar{#1}{\i}[\mychar]\mychar
-    }%
-  \fi
-}
-% \newcommand{\dottednumber}[1]{
-%   % \def\text{}
-%   % \foreach \x in {0,...,9} {
-%   %   \ifx#1\empty
-%   %     \break
-%   %   \def\mod{#1 mod 10}
-%   %   \def\div{#1/10}
-%   %   \def\text{\text.\mod}
-%   %   #1=\div
-%   % }
-%   \{#1\}
-%   \foreach \x in {0,...,9} {
-%     \edef\text{#1}
-%     \ifnum #1>0
-%       % \def\mod{#1 mod 10}
-%       % \def\div{#1/10}
-%       \edef\mod{\the\numexpr \text - (\text/10)*10\relax}
-%       \edef\div{\the\numexpr \text/10\relax}
-%       % \edef\text{\text.\mod}
-%       \edef\text{\div}
-
-%       \text.\mod
-%       % \text
-%       % \xdef#1{\div}
-%     \else
-%       \breakforeach
-%     \fi
-%   }
-% }
 \renewcommand*\contentsname{Table of Contents:}
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{%
@@ -175,39 +136,51 @@
       draw,
       inner sep=2pt,
       align=left,
+      % delay={
+      %   if n=0
+      %   {
+      %     content={\dottednumber{\forestoption{mycount}}\\\hline ##1},
+      %     % mycount=1,
+      %     for children={
+      %       mycount=mycount("!u"),
+      %       % parentlabel={\mylab},
+      %     },
+      %   }
+      %   {
+      %     % mylabel={\parentlab.\forestoption{n}},
+      %     mycount=mycount*10+n,
+      %     content={\dottednumber{\forestoption{mycount}}\\\hline ##1},
+      %     for children={
+      %       mycount=mycount("!u"),
+      %       % parentlabel={\mylab},
+      %     },
+      %   }
+      % },
       delay={
-        % if n=0
-        % {
-        %   content={\dottednumber{1}\\\hline ##1},
-        %   mycount=1,
-        %   for children={
-        %     mycount=mycount("!u"),
-        %     % parentlabel={\mylab},
-        %   },
-        % }
-        {
-          mylabel={\parentlab.\forestoption{n}},
-          mycount=mycount*10+n,
-          content={\dottednumber{\forestoption{mycount}}\\\hline ##1},
+        % root (n=0): take start label
+        if n=0{
+          this label/.expanded=\forestoption{start label},
+          content={\forestoption{this label}\\\hline ##1},
+          % pass this label to children through their parent label option
           for children={
-            mycount=mycount("!u"),
-            % parentlabel={\mylab},
+            parent label/.option=!u.this label
+          },
+        }{
+          % non-root: build text label from parent's parent label (set earlier) + .n
+          this label/.expanded=\forestoption{parent label}.\forestoption{n},
+          % this label=\forestoption{parent label},
+          content={\forestoption{this label}\\\hline ##1},
+          for children={
+            parent label/.option=!u.this label
           },
         }
       },
     }
   },
-  % helper keys
-  mylabel/.store in=\mylab,   % saves any string into \mylab
-  mylabel=,                   % default = empty
-  mylabel/.default={},        % ensures it works without explicit value
-  parentlabel/.store in=\parentlab,   % saves any string into \mylab
-  parentlabel=,                   % default = empty
-  parentlabel/.default={1},        % ensures it works without explicit value
-  declare count={mycount}{0},
-  declare count={parentCount}{0},
-  % number/.estore in=\thisnumber,
-  % parent number/.option=number,
+  declare count={mycount}{1},
+  declare toks={this label}{defaultThis},
+  declare toks={parent label}{defaultParent} ,
+  declare toks={start label}{1} , % default start label
 }
 
 % Define header
