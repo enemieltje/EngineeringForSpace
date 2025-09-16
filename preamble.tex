@@ -62,6 +62,7 @@
 \usepackage{subfiles}
 \usepackage[normalem]{ulem} % strikethrough support
 \usepackage{titling}
+\usepackage{pgffor}
 \setlength{\droptitle}{-4cm}
 
 % Optional enhancements
@@ -90,10 +91,48 @@
   \clearpage
   \subfile{#1}
 }
-\newcommand{\dotit}[1]{%
-  \def\temp{}%
-  \foreach \x in {#1}{\x} % <- expand into chars
+
+\usepackage{xstring}
+
+\newcommand{\dottednumber}[1]{%
+  \StrLen{#1}[\mylen]%
+  \StrChar{#1}{1}[\mychar]%
+  \mychar
+  \ifnum\mylen>1
+    \foreach \i in {2,...,\mylen}{%
+      .\StrChar{#1}{\i}[\mychar]\mychar
+    }%
+  \fi
 }
+% \newcommand{\dottednumber}[1]{
+%   % \def\text{}
+%   % \foreach \x in {0,...,9} {
+%   %   \ifx#1\empty
+%   %     \break
+%   %   \def\mod{#1 mod 10}
+%   %   \def\div{#1/10}
+%   %   \def\text{\text.\mod}
+%   %   #1=\div
+%   % }
+%   \{#1\}
+%   \foreach \x in {0,...,9} {
+%     \edef\text{#1}
+%     \ifnum #1>0
+%       % \def\mod{#1 mod 10}
+%       % \def\div{#1/10}
+%       \edef\mod{\the\numexpr \text - (\text/10)*10\relax}
+%       \edef\div{\the\numexpr \text/10\relax}
+%       % \edef\text{\text.\mod}
+%       \edef\text{\div}
+
+%       \text.\mod
+%       % \text
+%       % \xdef#1{\div}
+%     \else
+%       \breakforeach
+%     \fi
+%   }
+% }
 \renewcommand*\contentsname{Table of Contents:}
 \setcounter{secnumdepth}{2}
 \providecommand{\tightlist}{%
@@ -134,19 +173,27 @@
     for tree={
       edge={-},
       draw,
-      rounded corners,
-      minimum width=2.2cm,
-      minimum height=0.8cm,
       inner sep=2pt,
-      align=center,
+      align=left,
       delay={
-        mylabel={\parentlab.\forestoption{n}},
-        mycount=mycount*10+n,
-        content={\mylab\\\dotit{\forestoption{mycount}}\\\hline ##1},
-        for children={
-          mycount=mycount("!u"),
-          % parentlabel={\mylab},
-        },
+        % if n=0
+        % {
+        %   content={\dottednumber{1}\\\hline ##1},
+        %   mycount=1,
+        %   for children={
+        %     mycount=mycount("!u"),
+        %     % parentlabel={\mylab},
+        %   },
+        % }
+        {
+          mylabel={\parentlab.\forestoption{n}},
+          mycount=mycount*10+n,
+          content={\dottednumber{\forestoption{mycount}}\\\hline ##1},
+          for children={
+            mycount=mycount("!u"),
+            % parentlabel={\mylab},
+          },
+        }
       },
     }
   },
@@ -156,7 +203,7 @@
   mylabel/.default={},        % ensures it works without explicit value
   parentlabel/.store in=\parentlab,   % saves any string into \mylab
   parentlabel=,                   % default = empty
-  parentlabel/.default={},        % ensures it works without explicit value
+  parentlabel/.default={1},        % ensures it works without explicit value
   declare count={mycount}{0},
   declare count={parentCount}{0},
   % number/.estore in=\thisnumber,
